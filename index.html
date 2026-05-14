@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio de Mihajasoa Mario - Étudiant en informatique spécialisé en IA et analyse de données">
+    <meta name="author" content="Mihajasoa Mario">
+    <title>Mihajasoa Mario | Portfolio IA & Data</title>
+    <link rel="stylesheet" href="./dist/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        /* Animations supplémentaires */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        .bouton-animation {
+            animation: morph 3s ease-in-out infinite;
+        }
+        @keyframes morph {
+            0%, 100% { border-radius: 30px 6px 30px 6px; }
+            25% { border-radius: 6px 30px 6px 30px; }
+            50% { border-radius: 50px; }
+            75% { border-radius: 6px 50px 6px 50px; }
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 100, 0, 0.3);
+        }
+        
+        .skill-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .skill-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 100, 0, 0.4);
+        }
+        
+        /* Scroll personnalisé */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e1e2f;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #f97316, #dc2626);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #ea580c, #b91c1c);
+        }
+
+        /* Menu mobile styles */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 350px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: left 0.3s ease-in-out;
+            padding: 80px 30px 30px;
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .mobile-menu.active {
+            left: 0;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mobile-menu li {
+            margin-bottom: 25px;
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.3s;
+            display: block;
+            padding: 10px 0;
+        }
+
+        .mobile-menu a:hover {
+            color: #f97316;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .close-menu:hover {
+            transform: scale(1.1);
+            color: #f97316;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Modal CV */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255, 100, 0, 0.5);
+            box-shadow: 0 0 50px rgba(255, 100, 0, 0.3);
+        }
+        .modal-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f97316, #dc2626);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .modal-btn {
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        .modal-btn.confirm {
+            background: linear-gradient(135deg, #f97316, #dc2626);
+            color: white;
+        }
+        .modal-btn.confirm:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(249, 115, 22, 0.5);
+        }
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .modal-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bg-[url(../images/fond4.png)] font-bold text-white bg-fixed bg-cover bg-center min-h-screen">
+    <div class="fixed inset-0 backdrop-blur-md bg-slate-950/40 -z-10"></div>
+    
+    <!-- Modal CV -->
+    <div id="cvModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <i class="fas fa-file-pdf text-5xl text-orange-500 mb-4"></i>
+            <h3>Télécharger mon CV</h3>
+            <p class="text-orange-300 mb-4">Souhaitez-vous télécharger mon CV ?</p>
+            <div class="modal-buttons">
+                <button id="confirmDownload" class="modal-btn confirm">Oui, télécharger</button>
+                <button id="cancelDownload" class="modal-btn cancel">Annuler</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Menu mobile -->
+    <div class="mobile-menu">
+        <button class="close-menu" aria-label="Fermer le menu">&times;</button>
+        <ul>
+            <li><a href="#apropos" class="mobile-nav-link">À propos</a></li>
+            <li><a href="#projets" class="mobile-nav-link">Projets</a></li>
+            <li><a href="#formations" class="mobile-nav-link">Formations</a></li>
+            <li><a href="#competences" class="mobile-nav-link">Compétences</a></li>
+            <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+        </ul>
+    </div>
+    <div class="menu-overlay"></div>
+    
+    <!-- En-tête -->
+    <header class="flex items-center justify-between px-8 lg:px-20 py-6 backdrop-blur-sm bg-black/20 sticky top-0 z-50">
+        <div class="logo">
+            <img src="./images/logo.png" class="h-16 w-auto hover:scale-105 transition-transform duration-300" alt="Logo">
+        </div>
+
+        <nav class="hidden md:block">
+            <ul class="flex items-center gap-8 px-8 py-3 rounded-full backdrop-blur-md bg-white/5">
+                <li><a href="#apropos" class="hover:text-orange-400 transition-colors duration-300">À propos</a></li>
+                <li><a href="#projets" class="hover:text-orange-400 transition-colors duration-300">Projets</a></li>
+                <li><a href="#formations" class="hover:text-orange-400 transition-colors duration-300">Formations</a></li>
+                <li><a href="#competences" class="hover:text-orange-400 transition-colors duration-300">Compétences</a></li>
+                <li><a href="#contact" class="hover:text-orange-400 transition-colors duration-300">Contact</a></li>
+            </ul>
+        </nav>
+
+        <button class="contact-btn backdrop-blur-md rounded-full px-6 py-3 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 font-bold hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-orange-500/50" aria-label="Me contacter">
+            Me contacter
+        </button>
+
+        <!-- Burger menu -->
+        <button class="burger-menu flex flex-col gap-1.5 md:hidden" aria-label="Menu">
+            <span class="h-0.5 w-6 bg-amber-700"></span>
+            <span class="h-0.5 w-6 bg-amber-700"></span>
+            <span class="h-0.5 w-6 bg-amber-700"></span>
+        </button>
+    </header>
+    
+    <!-- Contenu principal -->
+    <main class="container mx-auto px-4 lg:px-20 py-12">
+        
+        <!-- Section À propos -->
+        <section id="apropos" class="flex flex-col lg:flex-row items-center justify-between gap-12 my-20 pb-20">
+            <div class="flex-1 p-8 backdrop-blur-xl rounded-2xl p-8 lg:p-12 shadow-[0_0_30px_rgba(255,100,0,0.5)] card-hover animate-float">
+                <p class="text-sm font-medium tracking-[0.3em] drop-shadow-white uppercase text-orange-400 mb-4">
+                    <i class="fas fa-hand-wave mr-2"></i> Bonjour, je me présente
+                </p>
+                <h1 class="text-4xl lg:text-5xl  font-extrabold mb-4 bg-gradient-to-b from-yellow-500 via-red-500 to-orange-300 bg-clip-text text-transparent">
+                    Mihajasoa Mario
+                </h1>
+                <h2 class="text-2xl lg:text-3xl font-bold mb-6 bg-gradient-to-r from-orange-400 via-red-500 to-orange-300 bg-clip-text text-transparent">
+                    Futur ingénieur en IA & analyse de données
+                </h2>
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="w-12 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></span>
+                    <p class="text-orange-200">Étudiant en Licence en cours en Informatique</p>
+                </div>
+                <p class="text-orange-300 mb-8 leading-relaxed">
+                    Passionné par la conception d'outils d'IA et l'analyse de données, 
+                    je m'efforce de créer des solutions innovantes qui résolvent des problèmes concrets.
+                </p>
+                <button class="cv-btn px-8 py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-full font-bold hover:shadow-xl bouton-animation transition-all duration-300 hover:scale-105">
+                    <i class="fas fa-download mr-2"></i> Télécharger mon CV
+                </button>
+            </div>
+            
+            <div class="flex-1 flex justify-center">
+                <div class="relative drop-shadow-[0_0_30px_rgba(255,100,0,0.6)] animate-float">
+                    <div class="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-full blur-2xl opacity-30"></div>
+                    <img src="./images/profil.jpg" class="w-auto h-100 rounded-full border-4 border-white/20 object-contain relative z-10 hover:scale-110 transition-transform duration-500 cursor-pointer" alt="Mihajasoa-profils">
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Projets -->
+        <section id="projets" class="my-32 pt-6">
+            <h2 class="text-center text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-orange-400 via-red-500 to-orange-300 bg-clip-text text-transparent mb-16">
+                Mes Projets
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <article class="backdrop-blur-xl rounded-2xl p-8 card-hover bg-white/5">
+                    <div class="text-5xl mb-4">🤖</div>
+                    <h3 class="font-extrabold text-2xl mb-3 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                        IA Spam Detector
+                    </h3>
+                    <p class="text-orange-300 mb-3 text-sm">Scikit-Learn · Machine Learning</p>
+                    <p class="text-orange-300 mb-6 leading-relaxed">
+                        Détection automatique de spams par classification avec Scikit-Learn. 
+                        Entraînement sur dataset réel avec évaluation des performances.
+                    </p>
+                    <a class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold"
+                        href="https://github.com/mihaajasoaedu-curx/IA_SPAM.git" target="_blank">
+                        <i class="fab fa-github"></i> Voir sur GitHub →
+                    </a>
+                </article>
+                
+                <article class="backdrop-blur-xl rounded-2xl p-8 card-hover bg-white/5">
+                    <div class="text-5xl mb-4">😊</div>
+                    <h3 class="font-extrabold text-2xl mb-3 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                        Analyseur de sentiments
+                    </h3>
+                    <p class="text-orange-300 mb-3 text-sm">Python · NLP</p>
+                    <p class="text-orange-300 mb-6 leading-relaxed">
+                        Analyse de polarité de phrases en Python. Identification des émotions 
+                        positives, négatives et neutres dans un texte brut.
+                    </p>
+                    <a class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold"
+                        href="https://github.com/andriatianamariomihajasoa-glitch/IA_analyst-phrases.git" target="_blank">
+                        <i class="fab fa-github"></i> Voir sur GitHub →
+                    </a>
+                </article>
+                
+                <article class="backdrop-blur-xl rounded-2xl p-8 card-hover bg-white/5">
+                    <div class="text-5xl mb-4">🍅</div>
+                    <h3 class="font-extrabold text-2xl mb-3 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                        Pomodoro App
+                    </h3>
+                    <p class="text-orange-300 mb-3 text-sm">Docker · Containerization</p>
+                    <p class="text-orange-300 mb-6 leading-relaxed">
+                        Application de gestion du temps basée sur la technique Pomodoro, 
+                        entièrement conteneurisée avec Docker pour un déploiement facile.
+                    </p>
+                    <a class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold"
+                        href="https://github.com/andriatianamariomihajasoa-glitch/Pomodoro.git" target="_blank">
+                        <i class="fab fa-github"></i> Voir sur GitHub →
+                    </a>
+                </article>
+
+                
+                
+                <article class="backdrop-blur-xl rounded-2xl p-8 card-hover bg-white/5">
+                    <div class="text-5xl mb-4">📋</div>
+                    <h3 class="font-extrabold text-2xl mb-3 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                        Task Flow
+                    </h3>
+                    <p class="text-orange-300 mb-3 text-sm">Docker · Containerization</p>
+                    <p class="text-orange-300 mb-6 leading-relaxed">
+                    TaskFlow est une application web de gestion de tâches (to-do list) qui fonctionne entièrement côté client. Elle ne nécessite aucune base de données ni serveur backend. Les données sont sauvegardées automatiquement dans le localStorage de votre navigateur. Vous pouvez l'utiliser hors ligne après le premier chargement.      
+                    </p>
+                    <a class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold"
+                        href="https://github.com/andriatianamariomihajasoa-glitch/TaskList.git" target="_blank">
+                        <i class="fab fa-github"></i> Voir sur GitHub →
+                    </a>
+                </article>
+
+                <article class="backdrop-blur-xl rounded-2xl p-8 card-hover bg-white/5">
+                    <div class="text-5xl mb-4">📊</div>
+                    <h3 class="font-extrabold text-2xl mb-3 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                        DataViz Dashboard
+                    </h3>
+                    <p class="text-orange-300 mb-3 text-sm">Pandas · Matplotlib</p>
+                    <p class="text-orange-300 mb-6 leading-relaxed">
+                        Tableau de bord interactif pour visualisation de données et statistiques descriptives.
+                    </p>
+                    <a class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold"
+                        href="https://github.com/andriatianamariomihajasoa-glitch" target="_blank">
+                        <i class="fab fa-github"></i> Bientôt Disponible.
+                    </a>
+                </article> 
+
+
+                 <article class="backdrop-blur-xl rounded-2xl p-8 card-hover bg-white/5">
+                    <div class="text-5xl mb-4">🧠</div>
+                    <h3 class="font-extrabold text-2xl mb-3 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                        Chatbot simple
+                    </h3>
+                    <p class="text-orange-300 mb-3 text-sm">Python · NLTK</p>
+                    <p class="text-orange-300 mb-6 leading-relaxed">
+                        Agent conversationnel basique avec reconnaissance d'intentions.
+                    </p>
+                    <a class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold"
+                        href="https://github.com/andriatianamariomihajasoa-glitch" target="_blank">
+                        <i class="">...</i> En Développement
+                    </a>
+                </article>
+            </div>
+        </section>
+        
+        <!-- Section Formations -->
+        <section id="formations" class="my-32">
+            <h2 class="text-center text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-orange-400 via-red-500 to-orange-300 bg-clip-text text-transparent mb-16">
+                Formations
+            </h2>
+            <div class="max-w-4xl mx-auto backdrop-blur-xl rounded-2xl p-8 card-hover bg-white/5">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-1 text-center md:text-left">
+                        <div class="text-6xl mb-4">🎓</div>
+                        <h3 class="text-3xl font-bold mb-2">Licence en cours Informatique</h3>
+                        <p class="text-orange-400 mb-3">2026 - Présent</p>
+                        <p class="text-orange-300">Université INSI d'Antananarivo, Madagascar</p>
+                    </div>
+                    <div class="flex-1">
+                        <ul class="space-y-3 text-orange-300">
+                            <li><i class="fas fa-check-circle text-orange-500 mr-3"></i> Algorithmique et programmation</li>
+                            <li><i class="fas fa-check-circle text-orange-500 mr-3"></i> Bases de données et SQL</li>
+                            <li><i class="fas fa-check-circle text-orange-500 mr-3"></i> Mathématiques pour l'informatique</li>
+                            <li><i class="fas fa-check-circle text-orange-500 mr-3"></i> Introduction à l'IA et au Machine Learning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Compétences -->
+        <section id="competences" class="my-32">
+            <div class="text-center mb-12">
+                <h2 class="text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-orange-400 via-red-500 to-orange-300 bg-clip-text text-transparent">
+                    Mes Compétences
+                </h2>
+                <p class="text-orange-300 mt-4 text-lg">Malgré mon statut de débutant, je maîtrise déjà de nombreux concepts</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="backdrop-blur-xl rounded-2xl p-8 skill-card bg-gradient-to-br from-blue-500/20 to-purple-600/20">
+                    <i class="fas fa-code text-4xl text-blue-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-3">Développement Backend & Logiciel</h3>
+                    <p class="text-orange-300 mb-2">C, Python, Java</p>
+                    <div class="w-full bg-orange-700 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full" style="width: 50%"></div>
+                    </div>
+                    <p class="text-sm text-orange-400 mt-2">Niveau: Intermédiaire</p>
+                </div>
+                
+                <div class="backdrop-blur-xl rounded-2xl p-8 skill-card bg-gradient-to-br from-green-500/20 to-teal-600/20">
+                    <i class="fab fa-html5 text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-3">Développement Web Frontend</h3>
+                    <p class="text-orange-300 mb-2">HTML5, CSS3, Tailwind CSS, JavaScript, Figma</p>
+                    <div class="w-full bg-orange-700 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-green-500 to-teal-500 h-2 rounded-full" style="width: 30%"></div>
+                    </div>
+                    <p class="text-sm text-orange-400 mt-2">Niveau: Débutant +</p>
+                </div>
+                
+                <div class="backdrop-blur-xl rounded-2xl p-8 skill-card bg-gradient-to-br from-purple-500/20 to-pink-600/20">
+                    <i class="fab fa-docker text-4xl text-blue-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-3">DevOps & Outils</h3>
+                    <p class="text-orange-300 mb-2">Docker, Git/GitHub</p>
+                    <div class="w-full bg-orange-700 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style="width: 30%"></div>
+                    </div>
+                    <p class="text-sm text-orange-400 mt-2">Niveau: Débutant</p>
+                </div>
+                
+                <div class="backdrop-blur-xl rounded-2xl p-8 skill-card bg-gradient-to-br from-red-500/20 to-orange-600/20">
+                    <i class="fas fa-chart-line text-4xl text-green-400 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-3">Data Science</h3>
+                    <p class="text-orange-300 mb-2">Numpy, Pandas, Matplotlib</p>
+                    <div class="w-full bg-orange-700 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full" style="width: 40%"></div>
+                    </div>
+                    <p class="text-sm text-orange-400 mt-2">Niveau: Débutant +</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section Contact -->
+        <section id="contact" class="my-32">
+            <h2 class="text-center text-6xl lg:text-7xl font-extrabold bg-gradient-to-r from-orange-400 via-red-500 to-orange-300 bg-clip-text text-transparent mb-16">
+                Me Contacter
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Informations de contact -->
+                <div class="backdrop-blur-xl rounded-2xl p-8 card-hover bg-white/5">
+                    <h3 class="text-3xl font-bold mb-8 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                        Entrons en contact
+                    </h3>
+                    <ul class="space-y-6">
+                        <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
+                            <i class="fas fa-envelope text-2xl text-orange-500 w-10"></i>
+                            <a href="mailto:andriatianamariomihajasoa@gmail.com" class="hover:text-orange-400 transition-colors">
+                                andriatianamariomihajasoa@gmail.com
+                            </a>
+                        </li>
+                        <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
+                            <i class="fab fa-linkedin text-2xl text-blue-500 w-10"></i>
+                            <a href="https://linkedin.com/in/mario-mihajasoa-163a29408" target="_blank" class="hover:text-orange-400 transition-colors">
+                                Mario Mihajasoa
+                            </a>
+                        </li>
+                        <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
+                            <i class="fab fa-github text-2xl text-orange-400 w-10"></i>
+                            <a href="https://github.com/andriatianamariomihajasoa-glitch" target="_blank" class="hover:text-orange-400 transition-colors">
+                                andriatianamariomihajasoa-glitch
+                            </a>
+                        </li>
+                        <li class="flex items-center gap-4 hover:translate-x-2 transition-transform">
+                            <i class="fas fa-phone text-2xl text-green-500 w-10"></i>
+                            <a href="tel:+261389193498" class="hover:text-orange-400 transition-colors">
+                                +261 38 91 934 98
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-8 pt-8 border-t border-orange-700">
+                        <p class="text-orange-400">
+                            <i class="fas fa-map-marker-alt text-orange-500 mr-2"></i>
+                            lot VA12EHJ Tsiadana - Antananarivo, Madagascar
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Formulaire de contact -->
+                <div class="backdrop-blur-xl rounded-2xl p-8 card-hover bg-white/5">
+                    <h3 class="text-3xl font-bold mb-8 bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                        Envoyez-moi un message
+                    </h3>
+                    <form id="contactForm" class="space-y-6">
+                        <div>
+                            <label for="nom" class="block mb-2 text-orange-300">Nom complet</label>
+                            <input type="text" id="nom" name="nom" required
+                                class="w-full px-4 py-3 bg-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-white placeholder-orange-400">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block mb-2 text-orange-300">Email</label>
+                            <input type="email" id="email" name="email" required
+                                class="w-full px-4 py-3 bg-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-white placeholder-orange-400">
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block mb-2 text-orange-300">Message</label>
+                            <textarea id="message" name="message" rows="5" required
+                                class="w-full px-4 py-3 bg-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-white placeholder-orange-400"></textarea>
+                        </div>
+                        
+                        <button type="submit" 
+                            class="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg font-bold hover:shadow-xl transition-all duration-300 hover:scale-105">
+                            <i class="fas fa-paper-plane mr-2"></i> Envoyer le message
+                        </button>
+                    </form>
+                    <div id="formMessage" class="mt-4 text-center hidden"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Pied de page -->
+    <footer class="bg-black/30 backdrop-blur-2xl py-8 px-4 mt-20">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center md:text-left">
+            <p class="text-orange-400 text-sm">
+                &copy; 2026 Mihajasoa Mario - Tous droits réservés
+            </p>
+            
+            <div class="flex justify-center">
+                <img src="./images/logo.png" alt="Logo" class="h-12 w-auto hover:scale-110 transition-transform">
+            </div>
+            
+            <div class="flex justify-center md:justify-end space-x-4">
+                <a href="https://www.facebook.com/mario.mihajasoa" class="text-orange-400 hover:text-orange-500 transition-colors">
+                    <i class="fab fa-facebook-f text-xl"></i>
+                </a>
+                <a href="https://x.com/MarioMihaj70383" class="text-orange-400 hover:text-orange-500 transition-colors">
+                    <i class="fab fa-twitter text-xl"></i>
+                </a>
+                <a href="https://linkedin.com/in/mario-mihajasoa-163a29408" class="text-orange-400 hover:text-orange-500 transition-colors">
+                    <i class="fab fa-linkedin text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
